@@ -53,7 +53,7 @@ router.get('/', function(req, res, next) {
 		}
 	}
 	boilerRuleIdArray.forEach((value) => {
-		options.uri = path + value.id;
+		options.uri = path + value.id; 
 		console.log(options);
 		request(options, function(err, res, data) {
 			console.log(data);
@@ -75,8 +75,8 @@ router.get('/', function(req, res, next) {
 	});
 
   res.render('index', { title: 'Express' });
-	
 
+	
 });
 
 
@@ -84,7 +84,7 @@ var totalRule = 2;
 var currentRule = 0;
 
 function changeRule(body) {
-	if(currentRule >= totalRule) {
+	if(currentRule >= totalRule) { //error 처리
 		return;
 	}
 
@@ -100,9 +100,21 @@ function changeRule(body) {
 	}
 	options.uri = path + ruleId;
 	currentRule += 1;
+	// console.log("YAP");
+	// console.log(body.ruleName);
+
 	request(options, function(error, response, data ) {
 		if(!error && response.statusCode === 200) {
 			var ruleData = JSON.parse(data).data.rule;
+			var thisAction = ruleData.then[0].action;
+			
+			// if(thisAction === 'setHumidifierState'){
+			// 	console.log("Hummi Hummi");
+			// }
+			// else if(thisAction === 'setBoilerState'){
+			// 	console.log("Boil Boil");
+			// }
+
 			ruleData.if.and[0].operand.value = parseInt(body.value);
 
 			options.method = 'PUT';
@@ -113,7 +125,7 @@ function changeRule(body) {
 
 			request(options, function(error2, response2, data2) {
 				if(!error2 && response2.statusCode == 200) {
-					changeRule(body);
+					changeRule(body); 
 				}
 			});
 		}
@@ -121,8 +133,9 @@ function changeRule(body) {
 }
 
 
-router.post('/', function(req, res, next) {
+router.post('/', function(req, res, next) { //이거는 처음에 그냥 들어가는건가.? 앞에 있는 ejs를 봐야한다. 그거랑 연관있다.
 	var body = req.body; // POST 데이터 body
+	currentRule=0;
 	changeRule(body);
 	res.send(JSON.stringify(body));
 	res.end();

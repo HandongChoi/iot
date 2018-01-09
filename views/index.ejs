@@ -157,7 +157,7 @@
 			$(function() {
 				var socket = io();
 				socket.on('device1Data', function(msg) {
-					$('#device1#temp').html(msg.temp + '(C)');
+					$('#device1 #temp').html(msg.temp + '(C)');
 					$('#device1#humidity').html(msg.humidity + '%');
 					$('#device1Boiler').removeClass('on').removeClass('off').addClass(msg.states.boilerState).html(msg.states.boilerState.toUpperCase());
 					$('#device1Humidifier').removeClass('on').removeClass('off').addClass(msg.states.humidifierState).html(msg.states.humidifierState.toUpperCase());
@@ -189,12 +189,14 @@
 						success: function(data) {
 							console.log("success");
 							console.log(data);
+							$('.device1 #setTemp #currentTempLimit').html('test' + '(C)');
 						},
 						error: function(err) {
 							console.log("error");
 							console.log(err);
 						}
 					});
+					
 				});
 				$('#setHumidity').submit(function(event) {
 					event.preventDefault();
@@ -207,6 +209,14 @@
 						method: 'POST',
 						url: '/',
 						data : data,
+						success: function(data) {
+							console.log("success");
+							console.log(data);
+						},
+						error: function(err) {
+							console.log("error");
+							console.log(err);
+						}
 					});
 				});
 			
