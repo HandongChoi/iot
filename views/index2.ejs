@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<style>
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+
+<body>
+<div style="display:flex;justify-content: space-around; align-items: center; padding-top:50px;" >
+   <div style="display:flex; align-items: center; flex-direction: column; border:1px solid black; padding:10px;">
+      <div style="display:flex;">
+         <div style="padding:10px; border-right :1px solid black;" >
+            <div style="margin-bottom: 5px;">온도</div>
+            <div>26.3C</div>
+         </div>
+         <div style="padding:10px;"> 
+            <div style="margin-bottom: 5px;">농도</div>
+            <div>53%</div>
+         </div>
+      </div>
+      <div>
+         <div>
+            <button id="myBtn1" style="margin:10px;">eidtbox</button><button style="margin:10px;">submit</button>
+         </div>
+
+      </div>
+      <div><!-- Rounded switch -->
+         <label class="switch">
+           <input type="checkbox">
+           <span class="slider round"></span>
+         </label>
+      </div>
+      
+   </div>
+   <div style="display:flex; align-items: center; flex-direction: column; border:1px solid black; padding:10px;">
+      <div style="display:flex;">
+         <div style="padding:10px; border-right :1px solid black;" >
+            <div style="margin-bottom: 5px;">온도</div>
+            <div>26.3C</div>
+         </div>
+         <div style="padding:10px;"> 
+            <div style="margin-bottom: 5px;">농도</div>
+            <div>53%</div>
+         </div>
+      </div>
+      <div>
+         <div>
+            <button id="myBtn2" style="margin:10px;">eidtbox</button><button style="margin:10px;">submit</button>
+         </div>
+
+      </div>
+      <div><!-- Rounded switch -->
+         <label class="switch">
+           <input type="checkbox">
+           <span class="slider round"></span>
+         </label>
+      </div>
+      
+   </div>
+   <div style="display:flex; align-items: center; flex-direction: column; border:1px solid black; padding:10px;">
+      <div style="display:flex;">
+         <div style="padding:10px; border-right :1px solid black;" >
+            <div style="margin-bottom: 5px;">온도</div>
+            <div>26.3C</div>
+         </div>
+         <div style="padding:10px;"> 
+            <div style="margin-bottom: 5px;">농도</div>
+            <div>53%</div>
+         </div>
+      </div>
+      <div>
+         <div>
+            <button id="myBtn3" style="margin:10px;">eidtbox</button><button style="margin:10px;">submit</button>
+         </div>
+
+      </div>
+      <div><!-- Rounded switch -->
+         <label class="switch">
+           <input type="checkbox">
+           <span class="slider round"></span>
+         </label>
+      </div>
+      
+   </div>
+</div>
+
+
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content" style="display:flex;justify-content: center; flex-direction: column;">
+    <span class="close" style="display:flex; align-self: flex-end;">&times;</span>
+    <div style="display:flex; margin-bottom:20px;"><div>최대 온도</div> <div><input type="text"></div></div>
+    <div style="display:flex; margin-bottom:20px;"><div>최소 온도</div> <div><input type="text"></div></div>
+    <div>
+    <button>OK</button><button>Cancel</button>
+     </div>
+  </div>
+
+</div>
+
+<script>
+   // Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn1");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+</script>
+</body>
+
+
+
+</html>
