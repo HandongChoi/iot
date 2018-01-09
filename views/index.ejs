@@ -37,8 +37,8 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="device">
-			  <div id="device1" style="display:flex;">
+			<div id="device1" class="device">
+			  <div style="display:flex;">
 				 <div class="temp" >
 					<div style="margin-bottom: 5px;">온도</div>
 					<div id="temp">N/A</div>
@@ -75,8 +75,8 @@
 			  </div>
 		   </div>
 
-		  <div class="device">
-			  <div id="device2" style="display:flex;">
+		  <div id="device2"class="device">
+			  <div  style="display:flex;">
 				 <div class="temp" >
 					<div style="margin-bottom: 5px;">온도</div>
 					<div id="temp">N/A</div>
@@ -113,8 +113,8 @@
 			  </div>
 		   </div>
 
-			<div class="device">
-			  <div id="device3" style="display:flex;">
+			<div id="device3"class="device">
+			  <div  style="display:flex;">
 				 <div class="temp" >
 					<div style="margin-bottom: 5px;">온도</div>
 					<div id="temp">N/A</div>
@@ -155,28 +155,48 @@
 		</div>
 		<script>
 			$(function() {
-				var socket = io();
+				var socket = io("http://localhost:4000");
+				socket.on("test", function(msg) {
+					console.log(msg);
+				});
+				setTimeout(function() {
+					socket.emit('getLimitData');
+				}, 1000);
 				socket.on('device1Data', function(msg) {
-					$('#device1#temp').html(msg.temp + '(C)');
-					$('#device1#humidity').html(msg.humidity + '%');
+					$('#device1 #temp').html(msg.temp + '(C)');
+					$('#device1 #humidity').html(msg.humidity + '%');
 					$('#device1Boiler').removeClass('on').removeClass('off').addClass(msg.states.boilerState).html(msg.states.boilerState.toUpperCase());
 					$('#device1Humidifier').removeClass('on').removeClass('off').addClass(msg.states.humidifierState).html(msg.states.humidifierState.toUpperCase());
 				});
 				socket.on('device2Data', function(msg) {
-					$('#device2#temp').html(msg.temp + '(C)');
-					$('#device2#humidity').html(msg.humidity + '%');
+					$('#device2 #temp').html(msg.temp + '(C)');
+					$('#device2 #humidity').html(msg.humidity + '%');
 					$('#device2Boiler').removeClass('on').removeClass('off').addClass(msg.states.boilerState).html(msg.states.boilerState.toUpperCase());
 					$('#device2Humidifier').removeClass('on').removeClass('off').addClass(msg.states.humidifierState).html(msg.states.humidifierState.toUpperCase());
 				});
 				socket.on('device3Data', function(msg) {
-					$('#device3#temp').html(msg.temp + '(C)');
-					$('#device3#humidity').html(msg.humidity + '%');
+					$('#device3 #temp').html(msg.temp + '(C)');
+					$('#device3 #humidity').html(msg.humidity + '%');
 					$('#device3Boiler').removeClass('on').removeClass('off').addClass(msg.states.boilerState).html(msg.states.boilerState.toUpperCase());
 					$('#device3Humidifier').removeClass('on').removeClass('off').addClass(msg.states.humidifierState).html(msg.states.humidifierState.toUpperCase());
 				});
+				socket.on('tempLimit', function(msg) {
+					console.log(msg);
+					msg.forEach((value, i) => {
+						$('#device'+(i+1)+' #currentTempLimit').html(value);
+					});
+				});
 
-				$('#setTemp').submit(function(event) {
+				socket.on('humidLimit', function(msg) {
+					console.log(msg);
+					msg.forEach((value, i) => {
+						$('#device'+(i+1)+' #currentHumLimit').html(value);
+					});
+				});
+				
+				function formCallback(event) {
 					event.preventDefault();
+					console.log($(this).attr('id'));
 					var data = {
 						ruleName : $(this).find('input[name="ruleName"]').val(),
 						deviceNo : $(this).find('input[name="deviceNo"]').val(),
@@ -187,7 +207,6 @@
 						url: '/',
 						data : data,
 						success: function(data) {
-							console.log("success");
 							console.log(data);
 						},
 						error: function(err) {
@@ -195,7 +214,9 @@
 							console.log(err);
 						}
 					});
-				});
+
+				}
+				$('#setTemp').submit(formCallback);
 				$('#setHumidity').submit(function(event) {
 					event.preventDefault();
 					var data = {
