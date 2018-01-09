@@ -196,12 +196,19 @@
 				
 				function formCallback(event) {
 					event.preventDefault();
-					console.log($(this).attr('id'));
 					var data = {
 						ruleName : $(this).find('input[name="ruleName"]').val(),
 						deviceNo : $(this).find('input[name="deviceNo"]').val(),
-						value : $(this).find('input[name="temp"]').val()
+						
 					}
+
+					if($(this).attr('id') === 'setTemp') {
+						data["value"] = $(this).find('input[name="temp"]').val()
+
+					} else {
+						data["value"] = $(this).find('input[name="humidity"]').val()
+					}
+
 					$.ajax({
 						method: 'POST',
 						url: '/',
@@ -216,20 +223,15 @@
 					});
 
 				}
-				$('#setTemp').submit(formCallback);
-				$('#setHumidity').submit(function(event) {
-					event.preventDefault();
-					var data = {
-						ruleName : $(this).find('input[name="ruleName"]').val(),
-						deviceNo : $(this).find('input[name="deviceNo"]').val(),
-						value : $(this).find('input[name="humidity"]').val()
-					}
-					$.ajax({
-						method: 'POST',
-						url: '/',
-						data : data,
-					});
-				});
+				$('#device1 #setTemp').submit(formCallback);
+				$('#device1 #setHumidity').submit(formCallback);
+
+				$('#device2 #setTemp').submit(formCallback);
+				$('#device2 #setHumidity').submit(formCallback);
+
+				$('#device3 #setTemp').submit(formCallback);
+				$('#device3 #setHumidity').submit(formCallback);
+
 			
 			});
 		</script>

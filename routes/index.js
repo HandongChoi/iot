@@ -147,6 +147,7 @@ function changeRule(body) {
 	options.uri = path + ruleId;
 	currentRule += 1;
 	request(options, function(error, response, data ) {
+			console.log(data);
 		if(!error && response.statusCode === 200) {
 			var ruleData = JSON.parse(data).data.rule;
 			ruleData.if.and[0].operand.value = parseInt(body.value);
